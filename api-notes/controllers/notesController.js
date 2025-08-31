@@ -1,100 +1,92 @@
-let notes = require("../models/notesModel");
+const { default: mongoose } = require("mongoose");
+const Note = require("../models/Note");
 
-const getNoteID = (req, res, next) => {
-  let note = notes.find(el => el.id === +req.params.id);
+const getNoteID = async (req, res) => {
+  try {
+    const noteId = req.params.id;
+    const note = await Note.findById(noteId);
 
-  if (!note) {
-    const err = new Error("Заметка не найдена");
-    err.statusCode = 404;
-    return next(err);
+    res.json({ "status": "success", data: note });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-
-  res.json({
-    "status": "success",
-    "data": note
-  });
 };
 
-const createNote = (req, res) => {
-  const { title, content } = req.body;
+const createNote = async (req, res) => {
 
-  if (!title || !content) {
-    res.status(400).json({ "status": "error", message: "title и content обязательны" });
+  try {
+    const { title, content } = req.body;
+
+    if (!title || !content) res.status(400).json({ "message": "Параметры - title и content обязательны" });
+
+    const isCreatedNote = await Note.create({ title, content });
+
+    if (!isCreatedNote) res.status(404).json({ "message": "Ошибка создания заметки" });
+
+    res.status(201).json({ "message": "Заметка успешно создана" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-
-  notes.push({
-    id: notes.length + 1,
-    title,
-    content
-  });
-
-  res.status(201).json({ "status": "success", data: notes });
 };
 
-const updateNote = (req, res, next) => {
-  let note = notes.find(el => el.id === +req.params.id);
+const updateNote = async (req, res) => {
+  try {
+    const { title, content } = req.body;
+    const { id } = req.params;
 
-  if (!note) {
-    const err = new Error("Заметка не найдена");
-    err.statusCode = 404;
-    return next(err);
+    if (!mongoose.Types.ObjectId.isValid(id)) res.status(400).json({ "message": "Неверный ID заметки" });
+
+    const isUpdateNote = await Note.findByIdAndUpdate(id, { title: title, content: content });
+
+    if (!isUpdateNote) json.status(404).json({ "message": "Заметка не найдена" });
+
+    res.json({ "message": "Заметка успешно обновлена" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-
-  const { title, content } = req.body;
-
-  if (title) note.title = title;
-  if (content) note.content = content;
-
-  res.json({ "status": "success", data: note });
 }
 
-const deleteNote = (req, res, next) => {
-  let note = notes.find(el => el.id === +req.params.id);
+const deleteNote = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-  if (!note) {
-    const err = new Error("Заметка не найдена");
-    err.statusCode = 404;
-    return next(err);
+    if (!mongoose.Types.ObjectId.isValid(id)) res.status(400).json({ "message": "Неверный ID заметки" });
+
+    const isDeleteNote = await Note.findOneAndDelete(id);
+
+    if (!isDeleteNote) json.status(404).json({ "message": "Заметка не найдена" });
+
+    res.status(200).json({ "message": "Заметка успешно удалена" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-
-  res.json({ "status": "success", data: notes.filter((el, i) => el.id !== +req.params.id) });
 }
 
-const getNotes = (req, res, next) => {
-  const { page, limit } = req.query;
+const getNotes = async (req, res) => {
+  try {
+    const { page, limit } = req.query;
+    const currentPage = parseInt(page, 10) || 1;
+    const perPage = parseInt(limit, 10) || 5;
+    const startIndex = (currentPage - 1) * perPage;
 
-  const currentPage = parseInt(page, 10) || 1;
-  const perPage = parseInt(limit, 10) || 5;
+    if (currentPage <= 0 || perPage <= 0) res.status(400).json({ "message": "Неверные параметры (page и limit должны быть > 0)" });
 
-  if (currentPage <= 0 || perPage <= 0) {
-    const err = new Error("Неверные параметры (page и limit должны быть > 0)");
-    err.statusCode = 400;
-    return next(err);
+    const notes = await Note.find().skip(startIndex).limit(limit);
+
+    if (!notes) res.status(400).json({ "message": "Данные не найдены" });
+
+    const totalNotes = await Note.countDocuments();
+    const totalPages = Math.ceil(totalNotes / limit);
+
+    if (currentPage > totalPages) res.status(404).json({ "message": `Страница ${currentPage} не существует, всего страниц: ${totalPages}` });
+
+    res.status(200).json({
+      totalNotes,
+      notes,
+    })
+  } catch (error) {
+    res.status(500).json({ "message": error.message });
   }
-
-  const countNotes = notes.length;
-  const totalPages = Math.ceil(countNotes / perPage);
-
-  if (currentPage > totalPages) {
-    return res.status(404).json({
-      status: "error",
-      message: `Страница №${currentPage} не существует, всего страниц: ${totalPages}`,
-    });
-  }
-
-  const startIndex = (currentPage - 1) * perPage;
-  const endIndex = currentPage * perPage;
-
-  const data = notes.slice(startIndex, endIndex);
-
-  res.json({
-    status: "success",
-    page: currentPage,
-    limit: perPage,
-    totalNotes: countNotes,
-    totalPages,
-    data,
-  });
 };
 
 
