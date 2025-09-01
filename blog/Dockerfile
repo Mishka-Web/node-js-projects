@@ -9,6 +9,10 @@ RUN npm install
 
 COPY . .
 
+RUN rm -rf generated
+
+RUN npx prisma generate
+
 # Этап 2: Продакшен
 # Теперь мы создаём чистый образ для запуска.
 # Он будет содержать только код и зависимости.
