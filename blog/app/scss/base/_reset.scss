@@ -1,0 +1,108 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	scroll-behavior: smooth;
+
+	&::selection {
+		color: $text-selection-color;
+		background-color: $bg-selection-color;
+	}
+}
+
+:root {
+	font-size: $root-fs;
+	accent-color: $accent-color;
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+}
+
+input,
+textarea,
+button,
+select {
+	background: none;
+	border: none;
+	outline: none;
+	font: inherit;
+	color: inherit;
+}
+
+input,
+textarea {
+	&::placeholder {
+		font: inherit;
+		color: inherit;
+	}
+}
+
+button {
+	cursor: pointer;
+}
+
+a,
+label,
+button {
+	-webkit-tap-highlight-color: transparent;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+textarea {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	appearance: none;
+	outline: 0;
+	box-shadow: none;
+}
+
+body,
+html {
+	height: 100%;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	color: $base-color;
+	font: {
+		style: normal;
+		weight: $base-fw;
+		size: $base-fs;
+		family: $base-ff;
+	}
+}
+
+a {
+	text-decoration: none;
+	text-decoration-skip-ink: none;
+	color: $link;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+ul {
+	list-style: none;
+}
+
+img {
+	object-fit: cover;
+	object-position: center;
+	height: auto;
+}
+
+.main {
+	flex-grow: 1;
+}
+
+.wrapper {
+	position: relative;
+	overflow: hidden;
+}

@@ -16,6 +16,21 @@ const getPostID = async (req, res) => {
 	}
 };
 
+const getPostSlug = async (req, res) => {
+	try {
+		const postId = +req.params.id;
+		const post = await prisma.post.findUnique({
+			where: {
+				id: postId,
+			},
+		});
+
+		res.json({ status: "success", data: post });
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
+};
+
 const getPosts = async (req, res) => {
 	try {
 		const { page, limit } = req.query;
@@ -54,15 +69,21 @@ const getPosts = async (req, res) => {
 
 const createPost = async (req, res) => {
 	try {
-		const { title, content, authorId } = req.body;
+		const { title, content, authorName, authorId } = req.body;
 
-		if (!title || !content || !authorId)
+		if (!title || !content || !authorId || !authorName)
 			res.status(400).json({
-				message: "Параметры - title, authorId и content обязательны",
+				message:
+					"Параметры - title, authorName, authorId и content обязательны",
 			});
 
 		const isCreatedPost = await prisma.post.create({
-			data: { title: title, content: content, authorId: authorId },
+			data: {
+				title: title,
+				content: content,
+				authorName: authorName,
+				authorId: authorId,
+			},
 		});
 
 		if (!isCreatedPost)
@@ -88,6 +109,7 @@ const updatePost = async (req, res) => {
 			data: {
 				title: data.title,
 				content: data.content,
+				authorName: data.authorName,
 				authorId: +authorId,
 			},
 		});
@@ -120,4 +142,11 @@ const deletePost = async (req, res) => {
 	}
 };
 
-module.exports = { getPosts, getPostID, createPost, updatePost, deletePost };
+module.exports = {
+	getPosts,
+	getPostID,
+	getPostSlug,
+	createPost,
+	updatePost,
+	deletePost,
+};

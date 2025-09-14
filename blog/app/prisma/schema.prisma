@@ -21,6 +21,7 @@ model User {
     role     Role    @default(USER)
     password String
     posts    Post[]
+	comments Comment[]
 }
 
 model Post {
@@ -28,7 +29,18 @@ model Post {
     title    String
     content  String?
     author   User    @relation(fields: [authorId], references: [id])
+	authorName String?
     authorId Int
+	comments Comment[]
+}
+
+model Comment {
+	id      Int     @id @default(autoincrement())
+	text    String
+	post    Post    @relation(fields: [postId], references: [id])
+	postId  Int
+	author  User    @relation(fields: [authorId], references: [id])
+	authorId Int
 }
 
 enum Role {

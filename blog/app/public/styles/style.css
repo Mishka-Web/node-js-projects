@@ -1,0 +1,173 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	scroll-behavior: smooth;
+}
+
+*::selection {
+	color: #222;
+	background-color: #fff;
+}
+
+:root {
+	font-size: 10px;
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+
+	--accent-color: #e77634;
+	--anime: all 0.15s ease-in 0s;
+}
+
+input,
+textarea,
+button,
+select {
+	background: none;
+	border: none;
+	outline: none;
+	font: inherit;
+	color: inherit;
+}
+
+input,
+textarea :where(::placeholder) {
+	font: inherit;
+	color: inherit;
+}
+
+button {
+	cursor: pointer;
+}
+
+a,
+label,
+button {
+	-webkit-tap-highlight-color: transparent;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+textarea {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	appearance: none;
+	outline: 0;
+	box-shadow: none;
+}
+
+body,
+html {
+	height: 100%;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	font-size: 1.6rem;
+	font-family: "Montserrat", sans-serif;
+}
+
+a {
+	text-decoration: none;
+	text-decoration-skip-ink: none;
+}
+
+ul {
+	list-style: none;
+}
+
+img {
+	object-fit: cover;
+	object-position: center;
+	height: auto;
+}
+
+.main {
+	flex-grow: 1;
+}
+
+.wrapper {
+	position: relative;
+	overflow: hidden;
+	padding-block: 2.4rem;
+}
+
+.container {
+	max-width: 1200px;
+	width: 100%;
+	margin: 0 auto;
+	padding: 0 2rem;
+}
+
+.header {
+	padding-block: 2.4rem;
+	background: #222;
+	color: #fff;
+}
+
+.header__nav > ul {
+	display: flex;
+	align-items: center;
+	gap: 1.2rem;
+}
+
+.header__nav > ul > li > a {
+	color: #fff;
+	font-weight: 500;
+}
+
+.header__nav > ul > li {
+	display: flex;
+	align-items: center;
+	gap: 1.2rem;
+}
+
+.header__nav > ul > li:not(:first-child)::before {
+	content: "|";
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(26rem, 1fr));
+	gap: 3rem;
+	margin-block-start: 2rem;
+}
+
+.card {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	padding: 2rem 1.8rem;
+	border: 3px dashed #333333;
+	color: #333333;
+	border-radius: 1rem;
+	min-height: 25rem;
+	transition: var(--anime);
+}
+
+.card:hover {
+	border-color: var(--accent-color);
+}
+
+.card:hover .card__author {
+	opacity: 0;
+	visibility: hidden;
+}
+
+.card__author {
+	font-weight: 400;
+	padding: 0.55rem 0.4rem;
+	background: var(--accent-color);
+	color: #fff;
+	border-radius: 0.3rem;
+	min-height: 2rem;
+	text-align: center;
+	margin-block-start: auto;
+	transition: var(--anime);
+}

@@ -1,0 +1,25 @@
+$breakpoints: (
+	mobile: 576px,
+	tablet: 768px,
+	tablet-wide: 992px,
+	laptop: 1200px,
+	desktop: 1400px
+);
+
+@include mq("mobile", min) {
+	.container {
+		--bs-gutter-x: 0;
+	}
+}
+
+@include mq("desktop", min) {
+	.container {
+		max-width: 1256px;
+	}
+}
+
+@include mq("mobile") {
+	.container {
+		--bs-gutter-x: 30px;
+	}
+}

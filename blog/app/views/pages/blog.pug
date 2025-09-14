@@ -1,0 +1,19 @@
+extends ../sample/_default
+
+block title
+	title= title
+
+block main
+	section.block 
+		.container
+			h1= title
+			.grid 
+				if posts.length > 0
+					each post in posts
+						a.card(href=`/posts/${post.id}`)
+							h4.card__title= post.title
+							p.card__text= post.content
+							if post.authorName
+								p.card__author #{post.authorName}
+				else
+					p Постов пока нет.

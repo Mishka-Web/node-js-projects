@@ -1,0 +1,16 @@
+.btn {
+	$this: &;
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	gap: 0.5rem 1.6rem;
+	flex: 0 0 auto;
+	text-decoration: none;
+	transition: $base-trn;
+	font-size: 1.6rem;
+	min-height: 4.4rem;
+	font-weight: 600;
+	padding: 0 1.5rem;
+}

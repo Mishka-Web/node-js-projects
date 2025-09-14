@@ -1,0 +1,13 @@
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	flex: 0 0 auto;
+	width: 2rem;
+	height: auto;
+	object-fit: contain;
+	user-select: none;
+	pointer-events: none;
+	transition: $base-trn;
+}
